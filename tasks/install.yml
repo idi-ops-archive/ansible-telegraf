@@ -1,0 +1,6 @@
+---
+
+- name: Install package
+  yum:
+    name: "{{ telegraf_package }}"
+    state: present

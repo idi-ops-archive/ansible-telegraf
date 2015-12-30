@@ -1,0 +1,76 @@
+---
+
+### 
+### AGENT
+###
+
+# Specify hash with tags
+telegraf_tags:
+#  dc: east-1
+#  role: load-balancer
+
+# Default data collection interval for all plugins
+telegraf_interval: '10s'
+
+# Rounds collection interval to 'interval' (i.e. if interval="10s" then always collect on :00, :10, :20, etc)
+telegraf_round_interval: yes
+
+# Default data flushing interval for all outputs
+telegraf_flush_interval: '10s'
+
+# Jitter the flush interval by a random amount (to avoid large write spikes from many Telegraf instances)
+telegraf_flush_jitter: '0s'
+
+# Run telegraf in debug mode
+telegraf_debug: no
+
+# Override default hostname
+telegraf_hostname: ''
+
+
+##
+## DATABASE CONNECTION
+##
+
+# InfluxDB precision (n, u, ms, s, m or h)
+telegraf_influxdb_precision: 's'
+
+# InfluxDB connection protocol (HTTP or UDP)
+telegraf_influxdb_protocol: http
+
+# InfluxDB server, port, database, username, password
+telegraf_influxdb_server: localhost
+telegraf_influxdb_port: 8086
+telegraf_influxdb_database: telegraf
+#telegraf_influxdb_username: ''
+#telegraf_influxdb_password: ''
+
+# Connection timeout
+#telegraf_influxdb_timeout: '5s'
+
+# User agent (to differentiate logs)
+#telegraf_influxdb_user_agent: telegraf
+
+# UDP payload size
+#telegraf_influxdb_udp_payload: 512
+
+##
+## PLUGINS
+##
+
+# Hash with plugin list and their configuration values
+telegraf_plugins:
+  cpu:
+    percpu: yes
+    totalcpu: yes
+    drop: '["cpu_time"]'
+
+  disk:
+
+  io:
+
+  mem:
+
+  swap:
+
+  system:

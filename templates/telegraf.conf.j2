@@ -1,0 +1,46 @@
+# Telegraf configuration
+
+[tags]
+  {% if telegraf_tags is iterable %}
+  {% for key in telegraf_tags -%}
+    {{ key }} = "{{ telegraf_tags[key] }}"
+  {% endfor -%}
+  {% endif %}
+  
+[agent]
+  interval = '{{ telegraf_interval }}'
+  round_interval = {% if telegraf_round_interval %}true{% else %}false{% endif %}
+
+  flush_interval = '{{ telegraf_flush_interval }}'
+  flush_jitter = '{{ telegraf_flush_jitter }}'
+  debug = {% if telegraf_debug -%}true{% else %}false{% endif %}
+
+  hostname = '{{ telegraf_hostname }}'
+  
+[outputs]
+
+[[outputs.influxdb]]
+  urls = ['{{ telegraf_influxdb_protocol }}://{{ telegraf_influxdb_server }}:{{ telegraf_influxdb_port }}']
+  database = '{{ telegraf_influxdb_database }}'
+  precision = '{{ telegraf_influxdb_precision }}'
+{% if telegraf_influxdb_timeout is defined %}  timeout = '{{ telegraf_influxdb_timeout }}'{% endif %}
+{% if telegraf_influxdb_username is defined %}  username = '{{ telegraf_influxdb_username }}'{% endif %}
+{% if telegraf_influxdb_password is defined %}  password = '{{ telegraf_influxdb_password }}'{% endif %}
+{% if telegraf_influxdb_user_agent is defined %}  user_agent = '{{ telegraf_influxdb_user_agent }}'{% endif %}
+{% if telegraf_influxdb_udp_payload is defined %}  udp_payload = {{ telegraf_influxdb_udp_payload }}{% endif %}
+
+[plugins]
+
+{% if telegraf_plugins is iterable %}
+{% for key in telegraf_plugins %}
+
+[[plugins.{{ key }}]]
+{% if telegraf_plugins[key] is iterable %}
+{% for key2 in telegraf_plugins[key] %}
+  {{ key2 }} = {% if telegraf_plugins[key][key2] == True %}true{% elif telegraf_plugins[key][key2] == False %}false{% else %}{{ telegraf_plugins[key][key2] }}{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% endif %}
